@@ -1,11 +1,11 @@
-package tourGuide;
+package tourguide;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import gpsUtil.GpsUtil;
 import rewardCentral.RewardCentral;
-import tourGuide.service.RewardsService;
+import tourguide.service.RewardsService;
 
 @Configuration
 public class TourGuideModule {

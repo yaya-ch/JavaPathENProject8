@@ -1,4 +1,4 @@
-package tourGuide.service;
+package tourguide.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -20,10 +20,10 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.tracker.Tracker;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourguide.helper.InternalTestHelper;
+import tourguide.tracker.Tracker;
+import tourguide.user.User;
+import tourguide.user.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 

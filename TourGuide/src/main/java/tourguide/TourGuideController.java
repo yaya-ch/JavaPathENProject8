@@ -1,4 +1,4 @@
-package tourGuide;
+package tourguide;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jsoniter.output.JsonStream;
 
 import gpsUtil.location.VisitedLocation;
-import tourGuide.service.TourGuideService;
-import tourGuide.user.User;
+import tourguide.service.TourGuideService;
+import tourguide.user.User;
 import tripPricer.Provider;
 
 @RestController

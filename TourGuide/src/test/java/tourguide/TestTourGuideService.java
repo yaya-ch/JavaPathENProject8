@@ -1,4 +1,4 @@
-package tourGuide;
+package tourguide;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,10 +13,10 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.service.RewardsService;
-import tourGuide.service.TourGuideService;
-import tourGuide.user.User;
+import tourguide.helper.InternalTestHelper;
+import tourguide.service.RewardsService;
+import tourguide.service.TourGuideService;
+import tourguide.user.User;
 import tripPricer.Provider;
 
 public class TestTourGuideService {

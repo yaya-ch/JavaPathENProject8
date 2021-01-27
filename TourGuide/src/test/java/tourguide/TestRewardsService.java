@@ -1,4 +1,4 @@
-package tourGuide;
+package tourguide;
 
 import static org.junit.Assert.*;
 
@@ -13,11 +13,11 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.service.RewardsService;
-import tourGuide.service.TourGuideService;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourguide.helper.InternalTestHelper;
+import tourguide.service.RewardsService;
+import tourguide.service.TourGuideService;
+import tourguide.user.User;
+import tourguide.user.UserReward;
 
 public class TestRewardsService {
 

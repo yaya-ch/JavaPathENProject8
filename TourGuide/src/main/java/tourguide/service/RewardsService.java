@@ -1,4 +1,4 @@
-package tourGuide.service;
+package tourguide.service;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourguide.user.User;
+import tourguide.user.UserReward;
 
 @Service
 public class RewardsService {
