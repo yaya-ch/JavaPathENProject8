@@ -12,7 +12,7 @@ import com.jsoniter.output.JsonStream;
 
 import gpsUtil.location.VisitedLocation;
 import tourguide.service.TourGuideService;
-import tourguide.user.User;
+import tourguide.domain.User;
 import tripPricer.Provider;
 
 /**
@@ -72,10 +72,9 @@ public class TourGuideController {
             //location and each of the attractions.
         // The reward points for visiting each Attraction.
         //    Note: Attraction reward points can be gathered from RewardsCentral
-
     /**
      * Get the 5 closest tourist attractions to the user.
-     * @param userName the user's usename
+     * @param userName the user's username
      * @return a list of the closest tourist attractions in json format
      */
     @RequestMapping("/getNearbyAttractions")
