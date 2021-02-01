@@ -17,8 +17,8 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 import tourguide.helper.InternalTestHelper;
-import tourguide.service.RewardsService;
-import tourguide.service.TourGuideService;
+import tourguide.service.RewardsServiceImpl;
+import tourguide.service.TourGuideServiceImpl;
 import tourguide.domain.User;
 
 public class PerformanceTest {
@@ -50,10 +50,10 @@ public class PerformanceTest {
     @Test
     public void highVolumeTrackLocation() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral(), this.executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
         // Users should be incremented up to 100,000, and test finishes within 15 minutes
         InternalTestHelper.setInternalUserNumber(100);
-        TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+        TourGuideServiceImpl tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 
         List<User> allUsers = tourGuideService.getAllUsers();
 
@@ -63,7 +63,7 @@ public class PerformanceTest {
             tourGuideService.trackUserLocation(user);
         }
         stopWatch.stop();
-        tourGuideService.tracker.stopTracking();
+        tourGuideService.getTracker().stopTracking();
 
         System.out.println("highVolumeTrackLocation: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
         assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
@@ -73,13 +73,13 @@ public class PerformanceTest {
     @Test
     public void highVolumeGetRewards() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral(), executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
 
         // Users should be incremented up to 100,000, and test finishes within 20 minutes
         InternalTestHelper.setInternalUserNumber(100);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+        TourGuideServiceImpl tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 
         Attraction attraction = gpsUtil.getAttractions().get(0);
         List<User> allUsers = tourGuideService.getAllUsers();
@@ -91,7 +91,7 @@ public class PerformanceTest {
             assertTrue(user.getUserRewards().size() > 0);
         }
         stopWatch.stop();
-        tourGuideService.tracker.stopTracking();
+        tourGuideService.getTracker().stopTracking();
 
         System.out.println("highVolumeGetRewards: Time Elapsed: "
                 + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
