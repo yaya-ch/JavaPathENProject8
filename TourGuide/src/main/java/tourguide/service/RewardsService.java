@@ -1,82 +1,40 @@
 package tourguide.service;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-
-import org.springframework.stereotype.Service;
-
-import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
-import rewardCentral.RewardCentral;
 import tourguide.domain.User;
-import tourguide.user.UserReward;
 
-@Service
-public class RewardsService {
-    private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
+/**
+ * The interface RewardsService.
+ * It contains abstract methods that provide
+ * the logic that will be used to operated on the data sent to and from
+ * the controllers and the repository layer
+ *
+ * @author Yahia CHERIFI
+ */
 
-    // proximity in miles
-    private int defaultProximityBuffer = 10;
-    private int proximityBuffer = defaultProximityBuffer;
-    private int attractionProximityRange = 200;
-    private final GpsUtil gpsUtil;
-    private final RewardCentral rewardsCentral;
-    private ExecutorService executorService;
+public interface RewardsService {
 
-    public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral, ExecutorService executorService) {
-        this.gpsUtil = gpsUtil;
-        this.rewardsCentral = rewardCentral;
-        this.executorService = executorService;
-    }
+    /**
+     * Calculate rewards for a given user.
+     * @param user the user to whom the rewards will be calculated
+     */
+    void calculateRewards(User user);
 
-    public void setProximityBuffer(int proximityBuffer) {
-        this.proximityBuffer = proximityBuffer;
-    }
+    /**
+     * Check whether a given location is close to a given attraction.
+     * @param attraction the attraction
+     * @param location the location
+     * @return a boolean to indicate if a location is close to a given location
+     */
+    boolean isWithinAttractionProximity(Attraction attraction,
+                                        Location location);
 
-    public void setDefaultProximityBuffer() {
-        proximityBuffer = defaultProximityBuffer;
-    }
-
-    public void calculateRewards(User user) {
-        List<VisitedLocation> userLocations = user.getVisitedLocations();
-        List<Attraction> attractions = gpsUtil.getAttractions();
-
-        for(VisitedLocation visitedLocation : userLocations) {
-            for(Attraction attraction : attractions) {
-                if(user.getUserRewards().stream().noneMatch(r -> r.attraction.attractionName.equals(attraction.attractionName))
-                        && nearAttraction(visitedLocation, attraction)){
-                    user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
-                }
-            }
-        }
-    }
-
-    public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
-        return getDistance(attraction, location) > attractionProximityRange ? false : true;
-    }
-
-    private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
-        return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
-    }
-
-    private int getRewardPoints(Attraction attraction, User user) {
-        return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
-    }
-
-    public double getDistance(Location loc1, Location loc2) {
-        double lat1 = Math.toRadians(loc1.latitude);
-        double lon1 = Math.toRadians(loc1.longitude);
-        double lat2 = Math.toRadians(loc2.latitude);
-        double lon2 = Math.toRadians(loc2.longitude);
-
-        double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-                               + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
-
-        double nauticalMiles = 60 * Math.toDegrees(angle);
-        double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
-        return statuteMiles;
-    }
-
+    /**
+     * Get the distance that separates two locations.
+     * @param loc1 location one
+     * @param loc2 location two
+     * @return the distance that separates two locations
+     */
+    double getDistance(Location loc1, Location loc2);
 }

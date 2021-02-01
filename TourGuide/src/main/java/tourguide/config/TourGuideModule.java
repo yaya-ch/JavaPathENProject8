@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import gpsUtil.GpsUtil;
 import rewardCentral.RewardCentral;
-import tourguide.service.RewardsService;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,17 +35,6 @@ public class TourGuideModule {
     }
 
     /**
-     * The rewardService bean.
-     * @return a new instance of the RewardService
-     */
-    @Bean
-    public RewardsService getRewardsService() {
-        return new RewardsService(getGpsUtil(),
-                getRewardCentral(),
-                executorService());
-    }
-
-    /**
      * The rewardCentral bean.
      * @return a new instance of the RewardCentral
      */
@@ -63,5 +51,4 @@ public class TourGuideModule {
     public ExecutorService executorService() {
         return Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     }
-
 }
