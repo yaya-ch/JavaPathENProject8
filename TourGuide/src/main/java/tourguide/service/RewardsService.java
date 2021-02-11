@@ -37,4 +37,12 @@ public interface RewardsService {
      * @return the distance that separates two locations
      */
     double getDistance(Location loc1, Location loc2);
+
+    /**
+     * Get the reward points for a given user and a given attraction.
+     * @param attraction the attraction
+     * @param user the user
+     * @return the number of reward points
+     */
+    int getRewardPoints(Attraction attraction, User user);
 }

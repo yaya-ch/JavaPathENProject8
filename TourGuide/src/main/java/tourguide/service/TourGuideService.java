@@ -3,6 +3,7 @@ package tourguide.service;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import tourguide.domain.User;
+import tourguide.dto.NearestAttractionsDTO;
 import tourguide.user.UserReward;
 import tripPricer.Provider;
 
@@ -72,4 +73,22 @@ public interface TourGuideService {
      * @return a list that contains 5 nearby attractions
      */
     List<Attraction> getNearByAttractions(VisitedLocation visitedLocation);
+
+    /**
+     * Get all attractions and sort them by distance(from closest to distant).
+     * @param visitedLocation the current user location
+     * @param user the user to whom distance will be calculated
+     * @return a list of all attractions sorted by distance
+     */
+    List<NearestAttractionsDTO> attractionsFromClosestToDistant(
+            VisitedLocation visitedLocation, User user);
+
+    /**
+     * Get the five closest tourist attractions to a given visited location.
+     * @param visitedLocation the visited location
+     * @param user the user to whom distance will be calculated
+     * @return a list that contains 5 tourist attractions
+     */
+    List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(
+            VisitedLocation visitedLocation, User user);
 }
