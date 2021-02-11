@@ -63,20 +63,20 @@ public class TourGuideServiceImpl implements TourGuideService {
     /**
      * Test mode.
      */
-    boolean testMode = true;
+    private final boolean testMode = true;
 
     /**
      * Constructor injection.
-     * @param gpsUtil the GpsUtil
+     * @param pGpsUtil the GpsUtil
      * @param pRewardsService the RewardService
      */
     @Autowired
-    public TourGuideServiceImpl(final GpsUtil gpsUtil,
+    public TourGuideServiceImpl(final GpsUtil pGpsUtil,
                                 final RewardsService pRewardsService) {
-        this.gpsUtil = gpsUtil;
+        this.gpsUtil = pGpsUtil;
         this.rewardsService = pRewardsService;
 
-        if(testMode) {
+        if (testMode) {
             LOGGER.info("TestMode enabled");
             LOGGER.debug("Initializing users");
             initializeInternalUsers();
@@ -91,7 +91,7 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @param user the user
      * @return a list that contains all the user rewards
      */
-    public List<UserReward> getUserRewards(User user) {
+    public List<UserReward> getUserRewards(final User user) {
         return user.getUserRewards();
     }
 
@@ -101,10 +101,10 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return the user's location
      */
     @Override
-    public VisitedLocation getUserLocation(User user) {
-        return (user.getVisitedLocations().size() > 0) ?
-                user.getLastVisitedLocation() :
-                trackUserLocation(user);
+    public VisitedLocation getUserLocation(final User user) {
+        return (user.getVisitedLocations().size() > 0)
+                ? user.getLastVisitedLocation()
+                : trackUserLocation(user);
     }
 
     /**
@@ -113,7 +113,7 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return the found user
      */
     @Override
-    public User getUser(String userName) {
+    public User getUser(final String userName) {
         return internalUserMap.get(userName);
     }
 
@@ -131,8 +131,8 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @param user the user that will be added
      */
     @Override
-    public void addUser(User user) {
-        if(!internalUserMap.containsKey(user.getUserName())) {
+    public void addUser(final User user) {
+        if (!internalUserMap.containsKey(user.getUserName())) {
             internalUserMap.put(user.getUserName(), user);
         }
     }
@@ -143,7 +143,7 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return a list of all trip deals
      */
     @Override
-    public List<Provider> getTripDeals(User user) {
+    public List<Provider> getTripDeals(final User user) {
         int cumulativeRewardPoints =
                 user.getUserRewards()
                         .stream()
@@ -166,8 +166,9 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return the location visited by the user
      */
     @Override
-    public VisitedLocation trackUserLocation(User user) {
-        VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
+    public VisitedLocation trackUserLocation(final User user) {
+        VisitedLocation visitedLocation =
+                gpsUtil.getUserLocation(user.getUserId());
         user.addToVisitedLocations(visitedLocation);
         rewardsService.calculateRewards(user);
         return visitedLocation;
@@ -179,10 +180,12 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return a list that contains 5 nearby attractions
      */
     @Override
-    public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
+    public List<Attraction> getNearByAttractions(
+            final VisitedLocation visitedLocation) {
         List<Attraction> nearbyAttractions = new ArrayList<>();
-        for(Attraction attraction : gpsUtil.getAttractions()) {
-            if(rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
+        for (Attraction attraction : gpsUtil.getAttractions()) {
+            if (rewardsService.isWithinAttractionProximity(attraction,
+                    visitedLocation.location)) {
                 nearbyAttractions.add(attraction);
             }
         }
@@ -197,17 +200,21 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return a list of all attractions sorted by distance
      */
     @Override
-    public List<NearestAttractionsDTO> attractionsFromClosestToDistant(VisitedLocation visitedLocation, User user) {
+    public List<NearestAttractionsDTO> attractionsFromClosestToDistant(
+            final VisitedLocation visitedLocation, final User user) {
         List<NearestAttractionsDTO> allAttractions = new ArrayList<>();
         for (Attraction a : gpsUtil.getAttractions()) {
             NearestAttractionsDTO attraction = new NearestAttractionsDTO();
             attraction.setAttractionName(a.attractionName);
             attraction.setLongitude(a.longitude);
             attraction.setLatitude(a.latitude);
-            attraction.setDistanceFromUser(rewardsService.getDistance(visitedLocation.location, a));
+            attraction.setDistanceFromUser(
+                    rewardsService.getDistance(visitedLocation.location, a));
             attraction.setRewardPoint(rewardsService.getRewardPoints(a, user));
             allAttractions.add(attraction);
-            allAttractions.sort(Comparator.comparingDouble(NearestAttractionsDTO::getDistanceFromUser));
+            allAttractions
+                    .sort(Comparator.comparingDouble(
+                            NearestAttractionsDTO::getDistanceFromUser));
         }
         return allAttractions;
     }
@@ -219,9 +226,11 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return a list that contains 5 tourist attractions
      */
     @Override
-    public List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(VisitedLocation visitedLocation, User user) {
+    public List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(
+            final VisitedLocation visitedLocation, final User user) {
         List<NearestAttractionsDTO> fiveClosestAttractions = new ArrayList<>();
-        List<NearestAttractionsDTO> attractionsByDistance = this.attractionsFromClosestToDistant(visitedLocation, user);
+        List<NearestAttractionsDTO> attractionsByDistance =
+                this.attractionsFromClosestToDistant(visitedLocation, user);
         for (NearestAttractionsDTO a: attractionsByDistance) {
             while (fiveClosestAttractions.size() < 5) {
                 fiveClosestAttractions.add(a);
@@ -267,7 +276,8 @@ public class TourGuideServiceImpl implements TourGuideService {
      * Initialize users and add them into the internalUserMap.
      */
     private void initializeInternalUsers() {
-        IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {
+        IntStream.range(0,
+                InternalTestHelper.getInternalUserNumber()).forEach(i -> {
             String userName = "internalUser" + i;
             String phone = "000";
             String email = userName + "@tourGuide.com";
@@ -276,7 +286,9 @@ public class TourGuideServiceImpl implements TourGuideService {
 
             internalUserMap.put(userName, user);
         });
-        LOGGER.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
+        LOGGER.debug("Created "
+                + InternalTestHelper.getInternalUserNumber()
+                + " internal test users.");
     }
 
     /**
@@ -284,9 +296,12 @@ public class TourGuideServiceImpl implements TourGuideService {
      * It is used for testing purposes
      * @param user the user to whom the location history will be generated
      */
-    private void generateUserLocationHistory(User user) {
-        IntStream.range(0, 3).forEach(i-> {
-            user.addToVisitedLocations(new VisitedLocation(user.getUserId(), new Location(generateRandomLatitude(), generateRandomLongitude()), getRandomTime()));
+    private void generateUserLocationHistory(final User user) {
+        IntStream.range(0, 3).forEach(i -> {
+            user.addToVisitedLocations(new VisitedLocation(user.getUserId(),
+                    new Location(generateRandomLatitude(),
+                            generateRandomLongitude()),
+                    getRandomTime()));
         });
     }
 
@@ -315,7 +330,8 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @return a random time
      */
     private Date getRandomTime() {
-        LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
+        LocalDateTime localDateTime =
+                LocalDateTime.now().minusDays(new Random().nextInt(30));
         return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
     }
 

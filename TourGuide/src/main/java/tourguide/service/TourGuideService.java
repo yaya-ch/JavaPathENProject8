@@ -80,7 +80,8 @@ public interface TourGuideService {
      * @param user the user to whom distance will be calculated
      * @return a list of all attractions sorted by distance
      */
-    List<NearestAttractionsDTO> attractionsFromClosestToDistant(VisitedLocation visitedLocation, User user);
+    List<NearestAttractionsDTO> attractionsFromClosestToDistant(
+            VisitedLocation visitedLocation, User user);
 
     /**
      * Get the five closest tourist attractions to a given visited location.
@@ -88,5 +89,6 @@ public interface TourGuideService {
      * @param user the user to whom distance will be calculated
      * @return a list that contains 5 tourist attractions
      */
-    List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(VisitedLocation visitedLocation, User user);
+    List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(
+            VisitedLocation visitedLocation, User user);
 }

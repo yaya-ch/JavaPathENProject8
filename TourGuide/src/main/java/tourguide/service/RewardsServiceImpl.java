@@ -115,9 +115,12 @@ public class RewardsServiceImpl implements RewardsService {
      * @return a boolean to indicate if a location is close to a given location
      */
     @Override
-    public boolean isWithinAttractionProximity(final Attraction attraction, final Location location) {
+    public boolean isWithinAttractionProximity(final Attraction attraction,
+                                               final Location location) {
         int attractionProximityRange = 200;
-        return getDistance(attraction, location) > attractionProximityRange ? false : true;
+        return getDistance(
+                attraction,
+                location) > attractionProximityRange ? false : true;
     }
 
     /**
@@ -134,7 +137,8 @@ public class RewardsServiceImpl implements RewardsService {
         double lon2 = Math.toRadians(loc2.longitude);
 
         double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-                               + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+                               + Math.cos(lat1) * Math.cos(lat2)
+                * Math.cos(lon1 - lon2));
 
         double nauticalMiles = 60 * Math.toDegrees(angle);
         return STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
@@ -144,11 +148,14 @@ public class RewardsServiceImpl implements RewardsService {
      * Check if a given attraction is near to a given visited location.
      * @param visitedLocation the visited location
      * @param attraction the attraction
-     * @return a boolean that indicates if a visited location is near to a given attraction
+     * @return a boolean that indicates if a visited location
+     * is near to a given attraction
      */
     private boolean nearAttraction(final VisitedLocation visitedLocation,
                                    final Attraction attraction) {
-        return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
+        return getDistance(
+                attraction,
+                visitedLocation.location) > proximityBuffer ? false : true;
     }
 
     /**
@@ -160,6 +167,8 @@ public class RewardsServiceImpl implements RewardsService {
     @Override
     public int getRewardPoints(final Attraction attraction,
                                 final User user) {
-        return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
+        return rewardsCentral
+                .getAttractionRewardPoints(attraction.attractionId,
+                        user.getUserId());
     }
 }

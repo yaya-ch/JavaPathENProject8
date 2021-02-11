@@ -44,5 +44,5 @@ public interface RewardsService {
      * @param user the user
      * @return the number of reward points
      */
-    int getRewardPoints(final Attraction attraction, final User user);
+    int getRewardPoints(Attraction attraction, User user);
 }
