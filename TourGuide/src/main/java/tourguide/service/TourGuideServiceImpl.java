@@ -2,13 +2,7 @@ package tourguide.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -20,6 +14,7 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import tourguide.dto.NearestAttractionsDTO;
 import tourguide.helper.InternalTestHelper;
 import tourguide.tracker.Tracker;
 import tourguide.domain.User;
@@ -195,6 +190,46 @@ public class TourGuideServiceImpl implements TourGuideService {
         return nearbyAttractions;
     }
 
+    /**
+     * Get all attractions and sort them by distance(from closest to distant).
+     * @param visitedLocation the current user location
+     * @param user the user to whom distance will be calculated
+     * @return a list of all attractions sorted by distance
+     */
+    @Override
+    public List<NearestAttractionsDTO> attractionsFromClosestToDistant(VisitedLocation visitedLocation, User user) {
+        List<NearestAttractionsDTO> allAttractions = new ArrayList<>();
+        for (Attraction a : gpsUtil.getAttractions()) {
+            NearestAttractionsDTO attraction = new NearestAttractionsDTO();
+            attraction.setAttractionName(a.attractionName);
+            attraction.setLongitude(a.longitude);
+            attraction.setLatitude(a.latitude);
+            attraction.setDistanceFromUser(rewardsService.getDistance(visitedLocation.location, a));
+            attraction.setRewardPoint(rewardsService.getRewardPoints(a, user));
+            allAttractions.add(attraction);
+            allAttractions.sort(Comparator.comparingDouble(NearestAttractionsDTO::getDistanceFromUser));
+        }
+        return allAttractions;
+    }
+
+    /**
+     * Get the five closest tourist attractions to a given visited location.
+     * @param visitedLocation the visited location
+     * @param user the user to whom distance will be calculated
+     * @return a list that contains 5 tourist attractions
+     */
+    @Override
+    public List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(VisitedLocation visitedLocation, User user) {
+        List<NearestAttractionsDTO> fiveClosestAttractions = new ArrayList<>();
+        List<NearestAttractionsDTO> attractionsByDistance = this.attractionsFromClosestToDistant(visitedLocation, user);
+        for (NearestAttractionsDTO a: attractionsByDistance) {
+            while (fiveClosestAttractions.size() < 5) {
+                fiveClosestAttractions.add(a);
+                break;
+            }
+        }
+        return fiveClosestAttractions;
+    }
     /**
      * Gets the tracker.
      * @return the tracker

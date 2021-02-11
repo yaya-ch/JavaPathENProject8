@@ -8,13 +8,12 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
+import tourguide.dto.NearestAttractionsDTO;
 import tourguide.helper.InternalTestHelper;
 import tourguide.service.RewardsServiceImpl;
 import tourguide.service.TourGuideServiceImpl;
@@ -96,9 +95,8 @@ public class TourGuideServiceImplTest {
         assertEquals(user.getUserId(), visitedLocation.userId);
     }
 
-    @Ignore // Not yet implemented
     @Test
-    public void getNearbyAttractions() {
+    public void getFiveCloseAttractionsToUser() {
         GpsUtil gpsUtil = new GpsUtil();
         RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
         InternalTestHelper.setInternalUserNumber(0);
@@ -107,7 +105,7 @@ public class TourGuideServiceImplTest {
         User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
         VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
 
-        List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
+        List<NearestAttractionsDTO> attractions = tourGuideService.getFiveCloseAttractionsToUser(visitedLocation, user);
 
         tourGuideService.getTracker().stopTracking();
 
