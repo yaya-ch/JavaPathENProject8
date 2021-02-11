@@ -157,7 +157,8 @@ public class RewardsServiceImpl implements RewardsService {
      * @param user the user
      * @return the number of reward points
      */
-    private int getRewardPoints(final Attraction attraction,
+    @Override
+    public int getRewardPoints(final Attraction attraction,
                                 final User user) {
         return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
     }
