@@ -13,6 +13,7 @@ import org.junit.Test;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
+import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.helper.InternalTestHelper;
 import tourguide.service.RewardsServiceImpl;
@@ -105,6 +106,7 @@ public class TourGuideServiceImplTest {
         User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
         VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
 
+
         List<NearestAttractionsDTO> attractions = tourGuideService.getFiveCloseAttractionsToUser(visitedLocation, user);
 
         tourGuideService.getTracker().stopTracking();
@@ -126,5 +128,21 @@ public class TourGuideServiceImplTest {
         tourGuideService.getTracker().stopTracking();
 
         assertEquals(5, providers.size());
+    }
+
+    @Test
+    public void getCurrentLocations() {
+        GpsUtil gpsUtil = new GpsUtil();
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
+        InternalTestHelper.setInternalUserNumber(0);
+        TourGuideServiceImpl tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
+
+        List<User> users = tourGuideService.getAllUsers();
+
+        List<CurrentLocationDTO> usersCurrentLocations = tourGuideService.getAllUsersLocations();
+
+        tourGuideService.getTracker().stopTracking();
+
+        assertEquals(users.size(), usersCurrentLocations.size());
     }
 }
