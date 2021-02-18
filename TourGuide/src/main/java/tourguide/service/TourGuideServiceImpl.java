@@ -2,7 +2,15 @@ package tourguide.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Date;
+import java.util.Comparator;
+import java.util.Random;
+
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -14,6 +22,7 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.helper.InternalTestHelper;
 import tourguide.tracker.Tracker;
@@ -239,6 +248,24 @@ public class TourGuideServiceImpl implements TourGuideService {
         }
         return fiveClosestAttractions;
     }
+
+    /**
+     * Get the current location of all users.
+     * @return a list that contains the users' current location
+     */
+    @Override
+    public List<CurrentLocationDTO> getAllUsersLocations() {
+        List<User> allUsers = this.getAllUsers();
+        List<CurrentLocationDTO> currentLocationDTOS = new ArrayList<>();
+        for (User u : allUsers) {
+            CurrentLocationDTO currentLocationDTO = new CurrentLocationDTO();
+            currentLocationDTO.setUserId(u.getUserId());
+            currentLocationDTO.setLocation(this.getUserLocation(u).location);
+            currentLocationDTOS.add(currentLocationDTO);
+        }
+        return currentLocationDTOS;
+    }
+
     /**
      * Gets the tracker.
      * @return the tracker

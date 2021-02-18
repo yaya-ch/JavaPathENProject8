@@ -3,6 +3,7 @@ package tourguide.service;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import tourguide.domain.User;
+import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.user.UserReward;
 import tripPricer.Provider;
@@ -91,4 +92,10 @@ public interface TourGuideService {
      */
     List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(
             VisitedLocation visitedLocation, User user);
+
+    /**
+     * Get the current location of all users.
+     * @return a list that contains the users' current location
+     */
+    List<CurrentLocationDTO> getAllUsersLocations();
 }
