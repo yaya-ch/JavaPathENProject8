@@ -15,6 +15,7 @@ import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.service.TourGuideService;
 import tourguide.domain.User;
+import tourguide.user.UserPreferences;
 import tripPricer.Provider;
 
 /**
@@ -99,15 +100,23 @@ public class TourGuideController {
     }
 
     /**
-     * Get all the trip deals for a given user.
+     * Get the trip deals for a given user(5 providers).
      * @param userName the user's username
      * @return a list of all the trip deals for a given user in a json format
      */
     @RequestMapping("/getTripDeals")
-    public String getTripDeals(@RequestParam final String userName) {
-        List<Provider> providers =
-                tourGuideService.getTripDeals(getUser(userName));
-        return JsonStream.serialize(providers);
+    public List<Provider> getTripDeals(@RequestParam final String userName,
+                                       @RequestParam final int tripDuration,
+                                       @RequestParam final int numberOfAdults,
+                                       @RequestParam final int numberOfChildren) {
+        User user = getUser(userName);
+        UserPreferences userPreferences = new UserPreferences();
+        userPreferences.setTripDuration(tripDuration);
+        userPreferences.setNumberOfAdults(numberOfAdults);
+        userPreferences.setNumberOfChildren(numberOfChildren);
+        user.setUserPreferences(userPreferences);
+
+        return tourGuideService.getTripDeals(user);
     }
 
     /**
