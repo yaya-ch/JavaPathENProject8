@@ -1,14 +1,14 @@
 package tourguide.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 import gpsUtil.location.VisitedLocation;
 import tourguide.user.UserPreferences;
 import tourguide.user.UserReward;
 import tripPricer.Provider;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The user class.
@@ -184,8 +184,8 @@ public class User {
      */
     public void addUserReward(final UserReward userReward) {
         if (this.userRewards.stream()
-                .noneMatch(r -> r.attraction.attractionName.equals(
-                        userReward.attraction.attractionName))) {
+                .noneMatch(r -> r.getAttraction().attractionName.equals(
+                        userReward.getAttraction().attractionName))) {
             this.userRewards.add(userReward);
         }
     }

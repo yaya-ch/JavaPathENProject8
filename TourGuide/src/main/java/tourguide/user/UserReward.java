@@ -2,29 +2,38 @@ package tourguide.user;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NonNull;
 
+/**
+ * The type User reward.
+ *
+ * @author Unknown TourGuide Developer
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class UserReward {
 
-	public final VisitedLocation visitedLocation;
-	public final Attraction attraction;
-	private int rewardPoints;
-	public UserReward(VisitedLocation visitedLocation, Attraction attraction, int rewardPoints) {
-		this.visitedLocation = visitedLocation;
-		this.attraction = attraction;
-		this.rewardPoints = rewardPoints;
-	}
-	
-	public UserReward(VisitedLocation visitedLocation, Attraction attraction) {
-		this.visitedLocation = visitedLocation;
-		this.attraction = attraction;
-	}
+    /**
+     * The Visited location.
+     */
+    @NonNull
+    private VisitedLocation visitedLocation;
+    /**
+     * The Attraction.
+     */
+    @NonNull
+    private Attraction attraction;
 
-	public void setRewardPoints(int rewardPoints) {
-		this.rewardPoints = rewardPoints;
-	}
-	
-	public int getRewardPoints() {
-		return rewardPoints;
-	}
-	
+    /**
+     * The reward points.
+     */
+    private int rewardPoints;
 }
