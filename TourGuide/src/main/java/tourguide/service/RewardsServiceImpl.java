@@ -1,18 +1,16 @@
 package tourguide.service;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import rewardCentral.RewardCentral;
 import tourguide.domain.User;
 import tourguide.user.UserReward;
+
+import java.util.List;
 
 /**
  * This class implements the RewardsService.
@@ -52,23 +50,15 @@ public class RewardsServiceImpl implements RewardsService {
     private final RewardCentral rewardsCentral;
 
     /**
-     * The ExecutorService.
-     */
-    private final ExecutorService executorService;
-
-    /**
      * Constructor injection.
      * @param pGpsUtil the gpsUtil.
      * @param pRewardCentral the RewardCentral
-     * @param pExecutorService the ExecutorService
      */
     @Autowired
     public RewardsServiceImpl(final GpsUtil pGpsUtil,
-                              final RewardCentral pRewardCentral,
-                              final ExecutorService pExecutorService) {
+                              final RewardCentral pRewardCentral) {
         this.gpsUtil = pGpsUtil;
         this.rewardsCentral = pRewardCentral;
-        this.executorService = pExecutorService;
     }
 
     /**
