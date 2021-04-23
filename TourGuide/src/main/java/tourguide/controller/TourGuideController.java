@@ -1,22 +1,20 @@
 package tourguide.controller;
 
-import java.util.List;
-
+import com.jsoniter.output.JsonStream;
+import gpsUtil.location.VisitedLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.jsoniter.output.JsonStream;
-
-import gpsUtil.location.VisitedLocation;
+import tourguide.domain.User;
 import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.service.TourGuideService;
-import tourguide.domain.User;
 import tourguide.user.UserPreferences;
 import tripPricer.Provider;
+
+import java.util.List;
 
 /**
  * The TourGuideController.
@@ -102,13 +100,17 @@ public class TourGuideController {
     /**
      * Get the trip deals for a given user(5 providers).
      * @param userName the user's username
+     * @param tripDuration the duration of the user's trip
+     * @param numberOfAdults the number of adults
+     * @param numberOfChildren the number of children
      * @return a list of all the trip deals for a given user in a json format
      */
     @RequestMapping("/getTripDeals")
-    public List<Provider> getTripDeals(@RequestParam final String userName,
-                                       @RequestParam final int tripDuration,
-                                       @RequestParam final int numberOfAdults,
-                                       @RequestParam final int numberOfChildren) {
+    public List<Provider> getTripDeals(
+            @RequestParam final String userName,
+            @RequestParam final int tripDuration,
+            @RequestParam final int numberOfAdults,
+            @RequestParam final int numberOfChildren) {
         User user = getUser(userName);
         UserPreferences userPreferences = new UserPreferences();
         userPreferences.setTripDuration(tripDuration);
