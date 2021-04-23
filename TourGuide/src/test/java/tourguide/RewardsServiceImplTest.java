@@ -1,34 +1,29 @@
 package tourguide;
 
-import static org.junit.Assert.*;
+import gpsUtil.GpsUtil;
+import gpsUtil.location.Attraction;
+import gpsUtil.location.VisitedLocation;
+import org.junit.Test;
+import rewardCentral.RewardCentral;
+import tourguide.domain.User;
+import tourguide.helper.InternalTestHelper;
+import tourguide.service.RewardsServiceImpl;
+import tourguide.service.TourGuideServiceImpl;
+import tourguide.user.UserReward;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.junit.Test;
-
-import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
-import rewardCentral.RewardCentral;
-import tourguide.helper.InternalTestHelper;
-import tourguide.service.RewardsServiceImpl;
-import tourguide.service.TourGuideServiceImpl;
-import tourguide.domain.User;
-import tourguide.user.UserReward;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RewardsServiceImplTest {
-
-    private final ExecutorService executorService =
-            Executors.newFixedThreadPool(1000);
 
     @Test
     public void userGetRewards() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral());
 
         InternalTestHelper.setInternalUserNumber(0);
         TourGuideServiceImpl tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
@@ -45,7 +40,7 @@ public class RewardsServiceImplTest {
     @Test
     public void isWithinAttractionProximity() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral());
         Attraction attraction = gpsUtil.getAttractions().get(0);
         assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
     }
@@ -53,7 +48,7 @@ public class RewardsServiceImplTest {
     @Test
     public void nearAllAttractions() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral());
         rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 
         InternalTestHelper.setInternalUserNumber(1);

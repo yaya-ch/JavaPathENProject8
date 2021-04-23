@@ -1,30 +1,24 @@
 package tourguide;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang3.time.StopWatch;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
+import org.apache.commons.lang3.time.StopWatch;
+import org.junit.Ignore;
+import org.junit.Test;
 import rewardCentral.RewardCentral;
+import tourguide.domain.User;
 import tourguide.helper.InternalTestHelper;
 import tourguide.service.RewardsServiceImpl;
 import tourguide.service.TourGuideServiceImpl;
-import tourguide.domain.User;
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 public class PerformanceTest {
-
-    private final ExecutorService executorService =
-            Executors.newFixedThreadPool(1000);
 
     /*
      * A note on performance improvements:
@@ -50,7 +44,7 @@ public class PerformanceTest {
     @Test
     public void highVolumeTrackLocation() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral());
         // Users should be incremented up to 100,000, and test finishes within 15 minutes
         InternalTestHelper.setInternalUserNumber(100);
         TourGuideServiceImpl tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
@@ -73,7 +67,7 @@ public class PerformanceTest {
     @Test
     public void highVolumeGetRewards() {
         GpsUtil gpsUtil = new GpsUtil();
-        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral(), executorService);
+        RewardsServiceImpl rewardsService = new RewardsServiceImpl(gpsUtil, new RewardCentral());
 
         // Users should be incremented up to 100,000, and test finishes within 20 minutes
         InternalTestHelper.setInternalUserNumber(100);
