@@ -88,7 +88,7 @@ public class RewardsServiceImpl implements RewardsService {
         for (VisitedLocation visitedLocation : userLocations) {
             for (Attraction attraction : attractions) {
                 if (user.getUserRewards().stream()
-                        .noneMatch(r -> r.attraction.attractionName
+                        .noneMatch(r -> r.getAttraction().attractionName
                                 .equals(attraction.attractionName))
                         && nearAttraction(visitedLocation, attraction)) {
                     user.addUserReward(new UserReward(visitedLocation,
