@@ -11,6 +11,7 @@ import tourguide.domain.User;
 import tourguide.user.UserReward;
 
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * This class implements the RewardsService.
@@ -48,6 +49,13 @@ public class RewardsServiceImpl implements RewardsService {
      * The RewardCentral that will be injected.
      */
     private final RewardCentral rewardsCentral;
+
+    /**
+     * The executor service that allows using n number of threads.
+     */
+    private final ExecutorService executorService =
+            Executors.newFixedThreadPool(200);
+
 
     /**
      * Constructor injection.
@@ -95,6 +103,33 @@ public class RewardsServiceImpl implements RewardsService {
                             attraction, getRewardPoints(attraction, user)));
                 }
             }
+        }
+    }
+
+    /**
+     * Calculate the users' rewards using n number of threads.
+     * It improves the app performances
+     * @param user the user to who rewards will be calculated
+     */
+    @Override
+    public void calculateRewardsWithThread(final User user) {
+        executorService.execute(() -> calculateRewards(user));
+    }
+
+    /**
+     * Shutdown the executor service.
+     */
+    @Override
+    public void shutDownExecutorService() {
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.MILLISECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException interruptedException) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
+
         }
     }
 

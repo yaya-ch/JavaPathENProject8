@@ -1,35 +1,29 @@
 package tourguide.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Date;
-import java.util.Comparator;
-import java.util.Random;
-
-import java.util.stream.IntStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tourguide.domain.User;
 import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.helper.InternalTestHelper;
 import tourguide.tracker.Tracker;
-import tourguide.domain.User;
 import tourguide.user.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * This class implements the TourGuideService.
@@ -68,6 +62,12 @@ public class TourGuideServiceImpl implements TourGuideService {
      * The Tracker.
      */
     private final Tracker tracker;
+
+    /**
+     * The executor service that allows using n number of threads.
+     */
+    private final ExecutorService executorService =
+            Executors.newFixedThreadPool(100);
 
     /**
      * Test mode.
@@ -181,6 +181,32 @@ public class TourGuideServiceImpl implements TourGuideService {
         user.addToVisitedLocations(visitedLocation);
         rewardsService.calculateRewards(user);
         return visitedLocation;
+    }
+
+    /**
+     * Track the location of a given user by using n number of threads.
+     * It improves the app performances
+     * @param user the user that will be tracked
+     */
+    @Override
+    public void trackUserLocationWithThread(User user) {
+        executorService.submit(() -> this.trackUserLocation(user));
+    }
+
+    /**
+     * Shutdown the Executor service.
+     */
+    @Override
+    public void shutDownExecutorService() {
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.MILLISECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -324,12 +350,12 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @param user the user to whom the location history will be generated
      */
     private void generateUserLocationHistory(final User user) {
-        IntStream.range(0, 3).forEach(i -> {
-            user.addToVisitedLocations(new VisitedLocation(user.getUserId(),
-                    new Location(generateRandomLatitude(),
-                            generateRandomLongitude()),
-                    getRandomTime()));
-        });
+        IntStream.range(0, 3).forEach(i -> user
+                .addToVisitedLocations(new VisitedLocation(user.getUserId(),
+                new Location(
+                        generateRandomLatitude(),
+                        generateRandomLongitude()),
+                        getRandomTime())));
     }
 
     /**

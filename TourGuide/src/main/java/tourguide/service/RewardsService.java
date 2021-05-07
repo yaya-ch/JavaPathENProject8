@@ -22,6 +22,17 @@ public interface RewardsService {
     void calculateRewards(User user);
 
     /**
+     * Calculate the users' rewards using n number of threads.
+     * It improves the app performances
+     * @param user the user to who rewards will be calculated
+     */
+    void calculateRewardsWithThread(User user);
+
+    /**
+     * Shutdown the executor service.
+     */
+    void shutDownExecutorService();
+    /**
      * Check whether a given location is close to a given attraction.
      * @param attraction the attraction
      * @param location the location
