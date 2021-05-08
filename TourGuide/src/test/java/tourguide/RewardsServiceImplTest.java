@@ -9,7 +9,7 @@ import tourguide.domain.User;
 import tourguide.helper.InternalTestHelper;
 import tourguide.service.RewardsServiceImpl;
 import tourguide.service.TourGuideServiceImpl;
-import tourguide.user.UserReward;
+import tourguide.domain.UserReward;
 
 import java.util.Date;
 import java.util.List;

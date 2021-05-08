@@ -13,7 +13,7 @@ import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.helper.InternalTestHelper;
 import tourguide.tracker.Tracker;
-import tourguide.user.UserReward;
+import tourguide.domain.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 

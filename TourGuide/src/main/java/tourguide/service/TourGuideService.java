@@ -5,7 +5,7 @@ import gpsUtil.location.VisitedLocation;
 import tourguide.domain.User;
 import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
-import tourguide.user.UserReward;
+import tourguide.domain.UserReward;
 import tripPricer.Provider;
 
 import java.util.List;

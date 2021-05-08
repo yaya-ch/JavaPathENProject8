@@ -1,8 +1,6 @@
 package tourguide.domain;
 
 import gpsUtil.location.VisitedLocation;
-import tourguide.user.UserPreferences;
-import tourguide.user.UserReward;
 import tripPricer.Provider;
 
 import java.util.ArrayList;
