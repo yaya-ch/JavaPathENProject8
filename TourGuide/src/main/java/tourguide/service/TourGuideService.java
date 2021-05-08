@@ -69,6 +69,17 @@ public interface TourGuideService {
     VisitedLocation trackUserLocation(User user);
 
     /**
+     * Track the location of a given user by using n number of threads.
+     * It improves the app performances
+     * @param user the user that will be tracked
+     */
+    void trackUserLocationWithThread(User user);
+
+    /**
+     * Shutdown the Executor service.
+     */
+    void shutDownExecutorService();
+    /**
      * Get the 5 nearby attractions of given visited location.
      * @param visitedLocation the visited location
      * @return a list that contains 5 nearby attractions
