@@ -9,6 +9,9 @@ package tourguide.helper;
  */
 public class InternalTestHelper {
 
+    protected InternalTestHelper() {
+    }
+
     /**
      * The number of users that will be generated for testing.
      * Set this default up to 100,000 for testing
@@ -17,10 +20,10 @@ public class InternalTestHelper {
 
     /**
      * Sets internal user number.
-     * @param internalUserNumber the internal user number
+     * @param pInternalUserNumber the internal user number
      */
-    public static void setInternalUserNumber(int internalUserNumber) {
-        InternalTestHelper.internalUserNumber = internalUserNumber;
+    public static void setInternalUserNumber(final int pInternalUserNumber) {
+        InternalTestHelper.internalUserNumber = pInternalUserNumber;
     }
 
     /**
