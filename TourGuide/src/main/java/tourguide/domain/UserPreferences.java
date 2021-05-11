@@ -1,4 +1,4 @@
-package tourguide.user;
+package tourguide.domain;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;

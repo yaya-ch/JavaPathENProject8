@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rewardCentral.RewardCentral;
 import tourguide.domain.User;
-import tourguide.user.UserReward;
+import tourguide.domain.UserReward;
 
 import java.util.List;
 import java.util.concurrent.*;

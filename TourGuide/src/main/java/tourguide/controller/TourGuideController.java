@@ -11,7 +11,7 @@ import tourguide.domain.User;
 import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.service.TourGuideService;
-import tourguide.user.UserPreferences;
+import tourguide.domain.UserPreferences;
 import tripPricer.Provider;
 
 import java.util.List;
