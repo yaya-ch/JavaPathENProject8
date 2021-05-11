@@ -328,7 +328,6 @@ public class TourGuideServiceImpl implements TourGuideService {
      * Initialize users and add them into the internalUserMap.
      */
     private void initializeInternalUsers() {
-        InternalTestHelper.setInternalUserNumber(100);
         IntStream.range(0,
                 InternalTestHelper.getInternalUserNumber()).forEach(i -> {
             String userName = "internalUser" + i;

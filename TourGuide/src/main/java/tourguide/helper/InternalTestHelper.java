@@ -11,22 +11,16 @@ public class InternalTestHelper {
 
     /**
      * The number of users that will be generated for testing.
+     * Set this default up to 100,000 for testing
      */
-    private static int internalUserNumber;
-
-    /**
-     * Instantiates a new Internal test helper.
-     */
-    protected InternalTestHelper() {
-    }
+    private static int internalUserNumber = 100000;
 
     /**
      * Sets internal user number.
-     *
-     * @param pInternalUserNumber the p internal user number
+     * @param internalUserNumber the internal user number
      */
-    public static void setInternalUserNumber(final int pInternalUserNumber) {
-        InternalTestHelper.internalUserNumber = pInternalUserNumber;
+    public static void setInternalUserNumber(int internalUserNumber) {
+        InternalTestHelper.internalUserNumber = internalUserNumber;
     }
 
     /**
