@@ -278,6 +278,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         for (NearestAttractionsDTO a: attractionsByDistance) {
             while (fiveClosestAttractions.size() < 5) {
                 fiveClosestAttractions.add(a);
+                break;
             }
         }
         return fiveClosestAttractions;
