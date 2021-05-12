@@ -19,7 +19,15 @@ import tripPricer.TripPricer;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+
+import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Date;
+import java.util.Random;
+import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -189,7 +197,7 @@ public class TourGuideServiceImpl implements TourGuideService {
      * @param user the user that will be tracked
      */
     @Override
-    public void trackUserLocationWithThread(User user) {
+    public void trackUserLocationWithThread(final User user) {
         executorService.submit(() -> this.trackUserLocation(user));
     }
 
@@ -200,7 +208,8 @@ public class TourGuideServiceImpl implements TourGuideService {
     public void shutDownExecutorService() {
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.MILLISECONDS)) {
+            if (!executorService.awaitTermination(Integer.MAX_VALUE,
+                    TimeUnit.MILLISECONDS)) {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -269,6 +278,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         for (NearestAttractionsDTO a: attractionsByDistance) {
             while (fiveClosestAttractions.size() < 5) {
                 fiveClosestAttractions.add(a);
+                break;
             }
         }
         return fiveClosestAttractions;

@@ -11,7 +11,9 @@ import tourguide.domain.User;
 import tourguide.domain.UserReward;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class implements the RewardsService.
@@ -123,7 +125,8 @@ public class RewardsServiceImpl implements RewardsService {
     public void shutDownExecutorService() {
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.MILLISECONDS)) {
+            if (!executorService.awaitTermination(Integer.MAX_VALUE,
+                    TimeUnit.MILLISECONDS)) {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException interruptedException) {
