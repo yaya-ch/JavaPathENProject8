@@ -2,16 +2,16 @@ package tourguide.controller;
 
 import com.jsoniter.output.JsonStream;
 import gpsUtil.location.VisitedLocation;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tourguide.domain.User;
+import tourguide.domain.UserPreferences;
 import tourguide.dto.CurrentLocationDTO;
 import tourguide.dto.NearestAttractionsDTO;
 import tourguide.service.TourGuideService;
-import tourguide.domain.UserPreferences;
 import tripPricer.Provider;
 
 import java.util.List;
@@ -45,7 +45,8 @@ public class TourGuideController {
      * The TourGuide's home page.
      * @return a greeting message
      */
-    @RequestMapping("/")
+    @ApiOperation(value = "Displays a greeting message")
+    @GetMapping("/")
     public String index() {
         return "Greetings from TourGuide!";
     }
@@ -55,7 +56,8 @@ public class TourGuideController {
      * @param userName the user's username
      * @return a user's location
      */
-    @RequestMapping("/getLocation")
+    @ApiOperation(value = "Retrieve a given user's location")
+    @GetMapping("/getLocation")
     public String getLocation(@RequestParam final String userName) {
         VisitedLocation visitedLocation =
                 tourGuideService.getUserLocation(getUser(userName));
@@ -67,7 +69,9 @@ public class TourGuideController {
      * @param userName the user's username
      * @return a list of the closest tourist attractions in json format
      */
-    @RequestMapping("/getFiveNearbyAttractions")
+    @ApiOperation(value = "Retrieve the five nearby touristic"
+            + " attractions to a given user")
+    @GetMapping("/getFiveNearbyAttractions")
     public List<NearestAttractionsDTO> getFiveCloseAttractionsToUser(
             @RequestParam final String userName) {
         VisitedLocation visitedLocation =
@@ -82,7 +86,8 @@ public class TourGuideController {
      * @param userName the user's username
      * @return all the user's rewards in json format
      */
-    @RequestMapping("/getRewards")
+    @ApiOperation(value = "Retrieves a given user's rewards.")
+    @GetMapping("/getRewards")
     public String getRewards(@RequestParam final String userName) {
         return JsonStream.serialize(tourGuideService
                 .getUserRewards(getUser(userName)));
@@ -92,7 +97,8 @@ public class TourGuideController {
      * Get the current positions of all users at the same time.
      * @return a list of the users' positions in a json format
      */
-    @RequestMapping("/getAllCurrentLocations")
+    @ApiOperation(value = "Retrieve all users' locations")
+    @GetMapping("/getAllCurrentLocations")
     public List<CurrentLocationDTO> getAllCurrentLocations() {
         return tourGuideService.getAllUsersLocations();
     }
@@ -105,7 +111,9 @@ public class TourGuideController {
      * @param numberOfChildren the number of children
      * @return a list of all the trip deals for a given user in a json format
      */
-    @RequestMapping("/getTripDeals")
+    @ApiOperation(value = "Retrieve all possible trip deals according"
+            + " to some user's preferences")
+    @GetMapping("/getTripDeals")
     public List<Provider> getTripDeals(
             @RequestParam final String userName,
             @RequestParam final int tripDuration,
@@ -126,6 +134,7 @@ public class TourGuideController {
      * @param userName the user's username
      * @return the found user
      */
+    @ApiOperation(value = "Retrieve a given user")
     @GetMapping("/getUser")
     private User getUser(@RequestParam final String userName) {
         return tourGuideService.getUser(userName);
